@@ -2947,7 +2947,7 @@
       "settings": {
         "enabled": true,
         "options": {
-          "mode": "常规",
+          "mode": "宽屏",
           "applyOnPlay": false
         }
       }
@@ -3556,7 +3556,7 @@
           "rememberVideoSpeed": 1695548814938,
           "doubleClickFullscreen": 1695548129978,
           "playerFocus": 1695553250174,
-          "defaultPlayerMode": 1695553202896,
+          "defaultPlayerMode": 1695553443061,
           "playerControlBackground": 1695548400904,
           "outerWatchlater": 1695548401386,
           "fullEpisodeTitle": 1695548399632,
