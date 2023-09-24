@@ -108,6 +108,14 @@
       "description": "\n\n为操作视频倍速提供快捷键支持：\n\n- 提高倍速\n- 降低倍速\n- 切换倍速\n\n若添加并启用了记忆倍速组件，则还会增加一个快捷键：\n\n- 清除倍速记忆\n  ",
       "commitHash": "67d61b5ef9dd817a4b2063b51bafa5a3ad4ba382",
       "coreVersion": "2.2.3"
+    },
+    "downloadVideo.outputs.motrix": {
+      "code": "!function(o,e){\"object\"==typeof exports&&\"object\"==typeof module?module.exports=e():\"function\"==typeof define&&define.amd?define([],e):\"object\"==typeof exports?exports[\"video/download/motrix-output\"]=e():o[\"video/download/motrix-output\"]=e()}(globalThis,(()=>(()=>{\"use strict\";var o={d:(e,t)=>{for(var r in t)o.o(t,r)&&!o.o(e,r)&&Object.defineProperty(e,r,{enumerable:!0,get:t[r]})},o:(o,e)=>Object.prototype.hasOwnProperty.call(o,e)},e={};o.d(e,{plugin:()=>r});const t=coreApis.toast,r={name:\"downloadVideo.outputs.motrix\",displayName:\"下载视频 - Motrix 输出支持\",description:\"为下载视频增加 Motrix 输出支持.\",setup:o=>{let{addData:e}=o;e(\"downloadVideo.outputs\",(o=>{o.push({name:\"motrix\",displayName:\"Motrix\",description:\"调用 Motrix 下载.\",runAction:async o=>{const e=o.infos.flatMap((o=>o.titledFragments));try{const o=new URLSearchParams({uris:e.map((o=>o.url)).join(\"\\n\"),referer:document.URL.replace(window.location.search,\"\")});window.open(`motrix://new-task?${o.toString()}`,\"_self\")}catch(o){t.Toast.error(String(o),\"发生错误\")}}})}))},commitHash:\"90b4192e1e37ad443ced11ff9ea766712239a79f\",coreVersion:\"2.7.6\"};return e=e.plugin})()));",
+      "displayName": "下载视频 - Motrix 输出支持",
+      "name": "downloadVideo.outputs.motrix",
+      "description": "为下载视频增加 Motrix 输出支持.",
+      "commitHash": "90b4192e1e37ad443ced11ff9ea766712239a79f",
+      "coreVersion": "2.7.6"
     }
   },
   "userComponents": {
@@ -2161,50 +2169,6 @@
         "options": {}
       }
     },
-    "darkModeSchedule": {
-      "code": "!function(e,t){\"object\"==typeof exports&&\"object\"==typeof module?module.exports=t():\"function\"==typeof define&&define.amd?define([],t):\"object\"==typeof exports?exports[\"style/dark-mode/schedule\"]=t():e[\"style/dark-mode/schedule\"]=t()}(globalThis,(()=>(()=>{\"use strict\";var e={d:(t,i)=>{for(var r in i)e.o(i,r)&&!e.o(t,r)&&Object.defineProperty(t,r,{enumerable:!0,get:i[r]})},o:(e,t)=>Object.prototype.hasOwnProperty.call(e,t)},t={};e.d(t,{component:()=>u});const i=coreApis.componentApis.define,r=coreApis.lifeCycle,o=coreApis.settings;function n(e,t,i){return(t=function(e){var t=function(e,t){if(\"object\"!=typeof e||null===e)return e;var i=e[Symbol.toPrimitive];if(void 0!==i){var r=i.call(e,t||\"default\");if(\"object\"!=typeof r)return r;throw new TypeError(\"@@toPrimitive must return a primitive value.\")}return(\"string\"===t?String:Number)(e)}(e,\"string\");return\"symbol\"==typeof t?t:String(t)}(t))in e?Object.defineProperty(e,t,{value:i,enumerable:!0,configurable:!0,writable:!0}):e[t]=i,e}class s{constructor(){n(this,\"hour\",void 0),n(this,\"minute\",void 0);for(var e=arguments.length,t=new Array(e),i=0;i<e;i++)t[i]=arguments[i];if(0===t.length){const e=new Date;this.hour=e.getHours(),this.minute=e.getMinutes()}else if(1===t.length){const[e]=t;[this.hour,this.minute]=e.split(\":\").slice(0,2).map((e=>s.validatePart(e))),this.normalize()}else 2===t.length&&([this.hour,this.minute]=t)}normalize(){for(;this.minute<0;)this.minute+=60,this.hour-=1;for(;this.minute>=60;)this.minute-=60,this.hour+=1;for(;this.hour<0;)this.hour+=24;for(;this.hour>=24;)this.hour-=24}lessThan(e){return this.hour<e.hour||this.hour===e.hour&&this.minute<e.minute}greaterThan(e){return this.hour>e.hour||this.hour===e.hour&&this.minute>e.minute}equals(e){return this.hour===e.hour&&this.minute===e.minute}isInRange(e,t){if(e.equals(t))return!1;let i=this.greaterThan(e)&&this.lessThan(t);e.greaterThan(t)&&(i=this.greaterThan(e)||this.lessThan(t));return i||this.equals(e)}toString(){return`${this.hour.toString().padStart(2,\"0\")}:${this.minute.toString().padStart(2,\"0\")}`}static validatePart(e){const t=parseInt(e);return!Number.isNaN(t)&&t>=0&&t<=59?t:null}static millisecondsBefore(e){const t=new s,i=(new Date).getSeconds(),r=1e3*(3600*t.hour+60*t.minute+i);let o=1e3*(3600*e.hour+60*e.minute)-r;return(t.greaterThan(e)||t.equals(e)&&0!==i)&&(o+=864e5),o}}const l=(0,i.defineOptionsMetadata)({range:{defaultValue:{start:\"18:00\",end:\"6:00\"},displayName:\"时间段\",validator:e=>{const{start:t,end:i}=e,r=/^(\\d{1,2}):(\\d{1,2})$/;if(!r.test(t)||!r.test(i))return null;const o=new s(e.start),n=new s(e.end);return{start:o.toString(),end:n.toString()}}}}),a=e=>{const t=new s(e.options.range.start),i=new s(e.options.range.end),r=(new s).isInRange(t,i),n=(0,o.getComponentSettings)(\"darkMode\");n.enabled!==r&&(n.enabled=r);let l=0;l=r?s.millisecondsBefore(i):s.millisecondsBefore(t),0!==l&&setTimeout((()=>a(e)),l)},u=(0,i.defineComponentMetadata)({name:\"darkModeSchedule\",displayName:\"夜间模式计划时段\",description:\"设置一个使用夜间模式的时间段, 进入 / 离开此时间段时, 会自动开启 / 关闭夜间模式. 结束时间小于起始时间时将视为次日, 如 `18:00` 至 `6:00` 表示晚上 18:00 到次日 6:00. 请勿和 `夜间模式跟随系统` 一同使用.\",tags:[componentsTags.style,componentsTags.general],entry:e=>{let{settings:t}=e;return(0,r.fullyLoaded)((()=>a(t)))},urlExclude:[\"//member.bilibili.com/v2\",\"//member.bilibili.com/platform\",\"//member.bilibili.com/video/upload.html\",\"//member.bilibili.com/article-text/home\",\"//www.bilibili.com/audio/submit/\",\"//member.bilibili.com/studio/bs-editor/projects\",\"//www.bilibili.com/s/video/\",\"//member.bilibili.com/platform\",\"//live.bilibili.com/p/html/live-lottery/anchor-join.html\",\"//account.bilibili.com/subtitle/edit/#/editor\",\"/york/allowance-charge\",\"//cm.bilibili.com/quests/#/task\",\"//live.bilibili.com/activity/live-activity-full/full-next/index.html\"],options:l,commitHash:\"90b4192e1e37ad443ced11ff9ea766712239a79f\",coreVersion:\"2.7.6\"});return t=t.component})()));",
-      "metadata": {
-        "name": "darkModeSchedule",
-        "displayName": "夜间模式计划时段",
-        "description": "设置一个使用夜间模式的时间段, 进入 / 离开此时间段时, 会自动开启 / 关闭夜间模式. 结束时间小于起始时间时将视为次日, 如 `18:00` 至 `6:00` 表示晚上 18:00 到次日 6:00. 请勿和 `夜间模式跟随系统` 一同使用.",
-        "tags": [
-          {
-            "name": "style",
-            "displayName": "样式",
-            "color": "#8BC34A",
-            "icon": "mdi-palette-outline",
-            "order": 2
-          },
-          {
-            "name": "general",
-            "displayName": "通用",
-            "color": "#888",
-            "icon": "mdi-progress-wrench",
-            "order": 8
-          }
-        ],
-        "options": {
-          "range": {
-            "defaultValue": {
-              "start": "18:00",
-              "end": "6:00"
-            },
-            "displayName": "时间段"
-          }
-        },
-        "commitHash": "90b4192e1e37ad443ced11ff9ea766712239a79f",
-        "coreVersion": "2.7.6"
-      },
-      "settings": {
-        "enabled": true,
-        "options": {
-          "range": {
-            "start": "18:00",
-            "end": "6:00"
-          }
-        }
-      }
-    },
     "hideBangumiReviews": {
       "code": "!function(e,t){\"object\"==typeof exports&&\"object\"==typeof module?module.exports=t():\"function\"==typeof define&&define.amd?define([],t):\"object\"==typeof exports?exports[\"style/hide/bangumi/reviews\"]=t():e[\"style/hide/bangumi/reviews\"]=t()}(globalThis,(()=>(()=>{var e,t,o={995:(e,t,o)=>{var r=o(355)((function(e){return e[1]}));r.push([e.id,\"#review_module {\\n  display: none !important;\\n}\",\"\"]),e.exports=r},355:e=>{\"use strict\";\n// eslint-disable-next-line func-names\ne.exports=function(e){var t=[];return t.toString=function(){return this.map((function(t){var o=e(t);return t[2]?\"@media \".concat(t[2],\" {\").concat(o,\"}\"):o})).join(\"\")},\n// eslint-disable-next-line func-names\nt.i=function(e,o,r){\"string\"==typeof e&&(\n// eslint-disable-next-line no-param-reassign\ne=[[null,e,\"\"]]);var n={};if(r)for(var i=0;i<this.length;i++){\n// eslint-disable-next-line prefer-destructuring\nvar a=this[i][0];null!=a&&(n[a]=!0)}for(var s=0;s<e.length;s++){var c=[].concat(e[s]);r&&n[c[0]]||(o&&(c[2]?c[2]=\"\".concat(o,\" and \").concat(c[2]):c[2]=o),t.push(c))}},t}},516:(e,t,o)=>{var r=o(995);r&&r.__esModule&&(r=r.default),e.exports=\"string\"==typeof r?r:r.toString()}},r={};function n(e){var t=r[e];if(void 0!==t)return t.exports;var i=r[e]={id:e,exports:{}};return o[e](i,i.exports,n),i.exports}t=Object.getPrototypeOf?e=>Object.getPrototypeOf(e):e=>e.__proto__,n.t=function(o,r){if(1&r&&(o=this(o)),8&r)return o;if(\"object\"==typeof o&&o){if(4&r&&o.__esModule)return o;if(16&r&&\"function\"==typeof o.then)return o}var i=Object.create(null);n.r(i);var a={};e=e||[null,t({}),t([]),t(t)];for(var s=2&r&&o;\"object\"==typeof s&&!~e.indexOf(s);s=t(s))Object.getOwnPropertyNames(s).forEach((e=>a[e]=()=>o[e]));return a.default=()=>o,n.d(i,a),i},n.d=(e,t)=>{for(var o in t)n.o(t,o)&&!n.o(e,o)&&Object.defineProperty(e,o,{enumerable:!0,get:t[o]})},n.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),n.r=e=>{\"undefined\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:\"Module\"}),Object.defineProperty(e,\"__esModule\",{value:!0})};var i={};return(()=>{\"use strict\";n.d(i,{component:()=>r});const e=coreApis.componentApis.define,t=coreApis.componentApis.styledComponent,o=coreApis.utils.urls,r=(0,e.defineComponentMetadata)({displayName:\"隐藏番剧点评\",tags:[componentsTags.style],...(0,t.toggleStyle)(\"hideBangumiReviews\",(()=>Promise.resolve().then(n.t.bind(n,516,23)))),urlInclude:o.bangumiUrls,description:{\"zh-CN\":\"隐藏番剧播放页面里的点评板块.\"},commitHash:\"90b4192e1e37ad443ced11ff9ea766712239a79f\",coreVersion:\"2.7.6\"})})(),i=i.component})()));",
       "metadata": {
@@ -2368,43 +2332,11 @@
               "order": 5
             }
           },
-          "personalized": false,
+          "personalized": true,
           "horizontalWheelScroll": false,
           "maxWidth": 1440,
           "rankListMode": "default"
         }
-      }
-    },
-    "playerOnTop": {
-      "code": "!function(e,t){\"object\"==typeof exports&&\"object\"==typeof module?module.exports=t():\"function\"==typeof define&&define.amd?define([],t):\"object\"==typeof exports?exports[\"style/player-on-top\"]=t():e[\"style/player-on-top\"]=t()}(globalThis,(()=>(()=>{var e,t,n={821:(e,t,n)=>{var o=n(355)((function(e){return e[1]}));o.push([e.id,\".v-wrap .l-con,\\n.v-wrap .r-con {\\n  display: flex;\\n  flex-direction: column;\\n  margin-top: 24px;\\n}\\n.v-wrap .l-con .player-wrap {\\n  order: -1;\\n}\\n.v-wrap .l-con .video-info {\\n  margin: 20px 0 0 0 !important;\\n  padding: 0 !important;\\n  height: auto !important;\\n}\\n.v-wrap .l-con .video-info .video-data .argue,\\n.v-wrap .l-con .video-info .video-data .copyright {\\n  overflow: hidden;\\n  text-overflow: ellipsis;\\n}\\n.v-wrap .r-con .danmaku-box {\\n  order: -1;\\n}\\n.v-wrap .r-con .up-info {\\n  padding-top: 0 !important;\\n}\",\"\"]),e.exports=o},355:e=>{\"use strict\";\n// eslint-disable-next-line func-names\ne.exports=function(e){var t=[];return t.toString=function(){return this.map((function(t){var n=e(t);return t[2]?\"@media \".concat(t[2],\" {\").concat(n,\"}\"):n})).join(\"\")},\n// eslint-disable-next-line func-names\nt.i=function(e,n,o){\"string\"==typeof e&&(\n// eslint-disable-next-line no-param-reassign\ne=[[null,e,\"\"]]);var r={};if(o)for(var a=0;a<this.length;a++){\n// eslint-disable-next-line prefer-destructuring\nvar i=this[a][0];null!=i&&(r[i]=!0)}for(var p=0;p<e.length;p++){var c=[].concat(e[p]);o&&r[c[0]]||(n&&(c[2]?c[2]=\"\".concat(n,\" and \").concat(c[2]):c[2]=n),t.push(c))}},t}},261:(e,t,n)=>{var o=n(821);o&&o.__esModule&&(o=o.default),e.exports=\"string\"==typeof o?o:o.toString()}},o={};function r(e){var t=o[e];if(void 0!==t)return t.exports;var a=o[e]={id:e,exports:{}};return n[e](a,a.exports,r),a.exports}t=Object.getPrototypeOf?e=>Object.getPrototypeOf(e):e=>e.__proto__,r.t=function(n,o){if(1&o&&(n=this(n)),8&o)return n;if(\"object\"==typeof n&&n){if(4&o&&n.__esModule)return n;if(16&o&&\"function\"==typeof n.then)return n}var a=Object.create(null);r.r(a);var i={};e=e||[null,t({}),t([]),t(t)];for(var p=2&o&&n;\"object\"==typeof p&&!~e.indexOf(p);p=t(p))Object.getOwnPropertyNames(p).forEach((e=>i[e]=()=>n[e]));return i.default=()=>n,r.d(a,i),a},r.d=(e,t)=>{for(var n in t)r.o(t,n)&&!r.o(e,n)&&Object.defineProperty(e,n,{enumerable:!0,get:t[n]})},r.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),r.r=e=>{\"undefined\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:\"Module\"}),Object.defineProperty(e,\"__esModule\",{value:!0})};var a={};return(()=>{\"use strict\";r.d(a,{component:()=>e});const e=(0,coreApis.componentApis.define.defineComponentMetadata)({name:\"playerOnTop\",displayName:\"播放器置顶\",description:{\"zh-CN\":\"在视频页面中将播放器放在页面最上方.\"},instantStyles:[{name:\"playerOnTop\",style:()=>Promise.resolve().then(r.t.bind(r,261,23))}],tags:[componentsTags.style,componentsTags.video],entry:none,commitHash:\"90b4192e1e37ad443ced11ff9ea766712239a79f\",coreVersion:\"2.7.6\"})})(),a=a.component})()));",
-      "metadata": {
-        "name": "playerOnTop",
-        "displayName": "播放器置顶",
-        "description": {
-          "zh-CN": "在视频页面中将播放器放在页面最上方."
-        },
-        "tags": [
-          {
-            "name": "style",
-            "displayName": "样式",
-            "color": "#8BC34A",
-            "icon": "mdi-palette-outline",
-            "order": 2
-          },
-          {
-            "name": "video",
-            "displayName": "视频",
-            "color": "#2196F3",
-            "icon": "mdi-play-circle-outline",
-            "order": 1
-          }
-        ],
-        "commitHash": "90b4192e1e37ad443ced11ff9ea766712239a79f",
-        "coreVersion": "2.7.6"
-      },
-      "settings": {
-        "enabled": true,
-        "options": {}
       }
     },
     "playerShadow": {
@@ -3116,39 +3048,6 @@
         }
       }
     },
-    "playerFocus": {
-      "code": "!function(e,t){\"object\"==typeof exports&&\"object\"==typeof module?module.exports=t():\"function\"==typeof define&&define.amd?define([],t):\"object\"==typeof exports?exports[\"video/player/focus\"]=t():e[\"video/player/focus\"]=t()}(globalThis,(()=>(()=>{\"use strict\";var e,t,o={200:e=>{e.exports=coreApis.spinQuery},605:e=>{e.exports=coreApis.utils}},r={};function i(e){var t=r[e];if(void 0!==t)return t.exports;var n=r[e]={exports:{}};return o[e](n,n.exports,i),n.exports}t=Object.getPrototypeOf?e=>Object.getPrototypeOf(e):e=>e.__proto__,i.t=function(o,r){if(1&r&&(o=this(o)),8&r)return o;if(\"object\"==typeof o&&o){if(4&r&&o.__esModule)return o;if(16&r&&\"function\"==typeof o.then)return o}var n=Object.create(null);i.r(n);var s={};e=e||[null,t({}),t([]),t(t)];for(var a=2&r&&o;\"object\"==typeof a&&!~e.indexOf(a);a=t(a))Object.getOwnPropertyNames(a).forEach((e=>s[e]=()=>o[e]));return s.default=()=>o,i.d(n,s),n},i.d=(e,t)=>{for(var o in t)i.o(t,o)&&!i.o(e,o)&&Object.defineProperty(e,o,{enumerable:!0,get:t[o]})},i.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),i.r=e=>{\"undefined\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:\"Module\"}),Object.defineProperty(e,\"__esModule\",{value:!0})};var n={};return(()=>{i.d(n,{component:()=>t});const e=coreApis.utils.urls,t=(0,coreApis.componentApis.define.defineComponentMetadata)({name:\"playerFocus\",displayName:\"播放器定位\",tags:[componentsTags.video],entry:async e=>{let{settings:{options:t}}=e;const o=document.URL.includes(\"bangumi\")?\".bilibili-player\":\".video-info .video-title .tit\",{select:r}=await Promise.resolve().then(i.t.bind(i,200,23)),{playerReady:n}=await Promise.resolve().then(i.t.bind(i,605,23)),s=await r(o);await n(),s&&(s.scrollIntoView(),0!==t.offset&&window.scrollBy(0,t.offset))},description:{\"zh-CN\":\"进入视频 / 番剧页面时, 自动定位到播放器. 注意: 不能和其他影响定位的功能一同使用, 例如自动宽屏. (相关讨论: [#483](https://github.com/the1812/Bilibili-Evolved/issues/483))\\n\\n可设置定位时的竖直偏移量, 单位为像素(px).\"},options:{offset:{displayName:\"定位偏移量\",defaultValue:-10}},urlInclude:e.videoAndBangumiUrls,commitHash:\"90b4192e1e37ad443ced11ff9ea766712239a79f\",coreVersion:\"2.7.6\"})})(),n=n.component})()));",
-      "metadata": {
-        "name": "playerFocus",
-        "displayName": "播放器定位",
-        "tags": [
-          {
-            "name": "video",
-            "displayName": "视频",
-            "color": "#2196F3",
-            "icon": "mdi-play-circle-outline",
-            "order": 1
-          }
-        ],
-        "description": {
-          "zh-CN": "进入视频 / 番剧页面时, 自动定位到播放器. 注意: 不能和其他影响定位的功能一同使用, 例如自动宽屏. (相关讨论: [#483](https://github.com/the1812/Bilibili-Evolved/issues/483))\n\n可设置定位时的竖直偏移量, 单位为像素(px)."
-        },
-        "options": {
-          "offset": {
-            "displayName": "定位偏移量",
-            "defaultValue": -10
-          }
-        },
-        "commitHash": "90b4192e1e37ad443ced11ff9ea766712239a79f",
-        "coreVersion": "2.7.6"
-      },
-      "settings": {
-        "enabled": true,
-        "options": {
-          "offset": -10
-        }
-      }
-    },
     "playerIntersectionActions": {
       "code": "!function(e,t){\"object\"==typeof exports&&\"object\"==typeof module?module.exports=t():\"function\"==typeof define&&define.amd?define([],t):\"object\"==typeof exports?exports[\"video/player/intersection-actions\"]=t():e[\"video/player/intersection-actions\"]=t()}(globalThis,(()=>(()=>{\"use strict\";var e={d:(t,o)=>{for(var n in o)e.o(o,n)&&!e.o(t,n)&&Object.defineProperty(t,n,{enumerable:!0,get:o[n]})},o:(e,t)=>Object.prototype.hasOwnProperty.call(e,t)},t={};e.d(t,{component:()=>d});const o=coreApis.componentApis.define,n=coreApis.componentApis.video.playerAgent,a=coreApis.componentApis.video.playerLight,i=coreApis.observer,s=coreApis.settings,r=coreApis.utils.urls;var p;!function(e){e.Top=\"视频顶部\",e.Medium=\"视频中间\",e.Bottom=\"视频底部\"}(p||(p={}));const d=(0,o.defineComponentMetadata)({name:\"playerIntersectionActions\",author:{name:\"Waua\",link:\"https://github.com/FoundTheWOUT\"},tags:[componentsTags.video],urlInclude:r.allVideoUrls,entry:async e=>{let{settings:{options:t},metadata:o}=e;const r=t;Promise.resolve().then((async()=>{const{query:{video:e}}=n.playerAgent,t=await e.element(),d=document.getElementById(\"video-player\")??(dq(\".player-wrap\")||dq(\".player-module\"));let l,c=!0;function u(e){switch(e){case p.Top:return 1;case p.Medium:return.5;case p.Bottom:return 0;default:return.5}}function m(){l.observe(d)}function y(){l.unobserve(d)}const g=e=>new IntersectionObserver((e=>{let[o]=e;o.isIntersecting?c||(c=!0,r.pause&&t.paused&&t.play(),r.light&&(0,s.getComponentSettings)(\"playerAutoLight\").enabled&&!r.pause&&!t.paused&&(0,a.lightOff)()):(t.paused||(c=!1),r.pause&&!t.paused&&t.pause(),r.light&&(0,s.getComponentSettings)(\"playerAutoLight\").enabled&&!r.pause&&(0,a.lightOn)())}),{threshold:u(e||r.triggerLocation)});(0,s.addComponentListener)(`${o.name}.triggerLocation`,(e=>{y(),l=g(e),m()})),l=g(),(0,i.videoChange)((async()=>{n.playerAgent.isAutoPlay()&&m(),t.addEventListener(\"play\",m),t.addEventListener(\"ended\",y)}))}))},displayName:\"播放器位置动作\",description:{\"zh-CN\":\"设置当播放器移出视图的位置变化时执行的动作.\"},options:{triggerLocation:{defaultValue:p.Medium,displayName:\"触发位置\",dropdownEnum:p},pause:{defaultValue:!1,displayName:\"自动暂停\"},light:{defaultValue:!0,displayName:\"自动开灯\"}},commitHash:\"90b4192e1e37ad443ced11ff9ea766712239a79f\",coreVersion:\"2.7.6\"});return t=t.component})()));",
       "metadata": {
@@ -3298,31 +3197,6 @@
         "description": {
           "zh-CN": "在播放器的时间右边增加两个按钮, 用于**较精细**调整视频时间. 装有 `快捷键扩展` 时支持键盘快捷键<kbd>Shift</kbd>+<kbd>←</kbd>/<kbd>→</kbd>.\n\n> 注: `视频的实际播放帧率`跟`视频本身的帧率`和`显示器的刷新率`有关, 很难计算一个精准的数值, 部分视频仍然会有暂停不到那种一闪而过的图的情况."
         },
-        "commitHash": "90b4192e1e37ad443ced11ff9ea766712239a79f",
-        "coreVersion": "2.7.6"
-      },
-      "settings": {
-        "enabled": true,
-        "options": {}
-      }
-    },
-    "showCoverBeforePlay": {
-      "code": "!function(e,o){\"object\"==typeof exports&&\"object\"==typeof module?module.exports=o():\"function\"==typeof define&&define.amd?define([],o):\"object\"==typeof exports?exports[\"video/player/show-cover\"]=o():e[\"video/player/show-cover\"]=o()}(globalThis,(()=>(()=>{var e,o,t={154:(e,o,t)=>{var n=t(355)((function(e){return e[1]}));n.push([e.id,'.bpx-player-video-wrap::after,\\n.bilibili-player-video::after {\\n  position: absolute;\\n  content: \"\";\\n  top: 0;\\n  left: 0;\\n  width: 100%;\\n  height: 100%;\\n  display: none;\\n  background: black var(--cover-url) center no-repeat;\\n  background-size: contain;\\n  pointer-events: none;\\n  z-index: 10;\\n}\\n\\n.bpx-player-container.bpx-state-paused .bpx-player-video-wrap::after {\\n  display: block;\\n}\\n\\n.bilibili-player-area.video-state-pause .bilibili-player-video::after {\\n  display: block;\\n}',\"\"]),e.exports=n},355:e=>{\"use strict\";\n// eslint-disable-next-line func-names\ne.exports=function(e){var o=[];return o.toString=function(){return this.map((function(o){var t=e(o);return o[2]?\"@media \".concat(o[2],\" {\").concat(t,\"}\"):t})).join(\"\")},\n// eslint-disable-next-line func-names\no.i=function(e,t,n){\"string\"==typeof e&&(\n// eslint-disable-next-line no-param-reassign\ne=[[null,e,\"\"]]);var r={};if(n)for(var i=0;i<this.length;i++){\n// eslint-disable-next-line prefer-destructuring\nvar a=this[i][0];null!=a&&(r[a]=!0)}for(var s=0;s<e.length;s++){var c=[].concat(e[s]);n&&r[c[0]]||(t&&(c[2]?c[2]=\"\".concat(t,\" and \").concat(c[2]):c[2]=t),o.push(c))}},o}},330:(e,o,t)=>{var n=t(154);n&&n.__esModule&&(n=n.default),e.exports=\"string\"==typeof n?n:n.toString()},77:e=>{\"use strict\";e.exports=coreApis.componentApis.video.videoInfo}},n={};function r(e){var o=n[e];if(void 0!==o)return o.exports;var i=n[e]={id:e,exports:{}};return t[e](i,i.exports,r),i.exports}o=Object.getPrototypeOf?e=>Object.getPrototypeOf(e):e=>e.__proto__,r.t=function(t,n){if(1&n&&(t=this(t)),8&n)return t;if(\"object\"==typeof t&&t){if(4&n&&t.__esModule)return t;if(16&n&&\"function\"==typeof t.then)return t}var i=Object.create(null);r.r(i);var a={};e=e||[null,o({}),o([]),o(o)];for(var s=2&n&&t;\"object\"==typeof s&&!~e.indexOf(s);s=o(s))Object.getOwnPropertyNames(s).forEach((e=>a[e]=()=>t[e]));return a.default=()=>t,r.d(i,a),i},r.d=(e,o)=>{for(var t in o)r.o(o,t)&&!r.o(e,t)&&Object.defineProperty(e,t,{enumerable:!0,get:o[t]})},r.o=(e,o)=>Object.prototype.hasOwnProperty.call(e,o),r.r=e=>{\"undefined\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:\"Module\"}),Object.defineProperty(e,\"__esModule\",{value:!0})};var i={};return(()=>{\"use strict\";r.d(i,{component:()=>a});const e=coreApis.componentApis.define,o=coreApis.observer,t=coreApis.utils,n=coreApis.utils.urls,a=(0,e.defineComponentMetadata)({name:\"showCoverBeforePlay\",displayName:\"播放前显示封面\",urlInclude:n.playerUrls,entry:async()=>{let e;(0,o.videoChange)((()=>{console.debug(\"isBpxPlayer\");const e=dq(\".bpx-player-video-wrap video\");e?(0,t.createHook)(e,\"play\",(()=>(document.documentElement.style.removeProperty(\"--cover-url\"),!0))):console.warn(\"bpx player not found\")}));(0,o.videoChange)((async o=>{let{aid:t}=o;if(!t)return void console.warn(\"[播放前显示封面] 未找到av号\");if(t===e)return;e=t;const{VideoInfo:n}=await Promise.resolve().then(r.t.bind(r,77,23)),i=new n(t);await i.fetchInfo(),document.documentElement.style.setProperty(\"--cover-url\",`url('${i.coverUrl}')`)}))},instantStyles:[{name:\"showCoverBeforePlay\",style:()=>Promise.resolve().then(r.t.bind(r,330,23))}],description:{\"zh-CN\":\"在视频开始播放前, 在播放器中显示封面.\"},tags:[componentsTags.video],commitHash:\"90b4192e1e37ad443ced11ff9ea766712239a79f\",coreVersion:\"2.7.6\"})})(),i=i.component})()));",
-      "metadata": {
-        "name": "showCoverBeforePlay",
-        "displayName": "播放前显示封面",
-        "description": {
-          "zh-CN": "在视频开始播放前, 在播放器中显示封面."
-        },
-        "tags": [
-          {
-            "name": "video",
-            "displayName": "视频",
-            "color": "#2196F3",
-            "icon": "mdi-play-circle-outline",
-            "order": 1
-          }
-        ],
         "commitHash": "90b4192e1e37ad443ced11ff9ea766712239a79f",
         "coreVersion": "2.7.6"
       },
@@ -3592,6 +3466,64 @@
         "enabled": true,
         "options": {}
       }
+    },
+    "disableScrollVolume": {
+      "code": "!function(e,o){\"object\"==typeof exports&&\"object\"==typeof module?module.exports=o():\"function\"==typeof define&&define.amd?define([],o):\"object\"==typeof exports?exports[\"video/player/disable-scroll-volume\"]=o():e[\"video/player/disable-scroll-volume\"]=o()}(globalThis,(()=>(()=>{var e,o,t={132:e=>{function o(e){var o=new Error(\"Cannot find module '\"+e+\"'\");throw o.code=\"MODULE_NOT_FOUND\",o}o.keys=()=>[],o.resolve=o,o.id=132,e.exports=o},466:e=>{\"use strict\";e.exports=\"在网页全屏 / 全屏模式下, 禁止鼠标滚轮控制播放器的音量.  请注意不能和 `反转滚轮调音量` 一同使用.\\n\"}},r={};function n(e){var o=r[e];if(void 0!==o)return o.exports;var l=r[e]={exports:{}};return t[e](l,l.exports,n),l.exports}o=Object.getPrototypeOf?e=>Object.getPrototypeOf(e):e=>e.__proto__,n.t=function(t,r){if(1&r&&(t=this(t)),8&r)return t;if(\"object\"==typeof t&&t){if(4&r&&t.__esModule)return t;if(16&r&&\"function\"==typeof t.then)return t}var l=Object.create(null);n.r(l);var i={};e=e||[null,o({}),o([]),o(o)];for(var s=2&r&&t;\"object\"==typeof s&&!~e.indexOf(s);s=o(s))Object.getOwnPropertyNames(s).forEach((e=>i[e]=()=>t[e]));return i.default=()=>t,n.d(l,i),l},n.d=(e,o)=>{for(var t in o)n.o(o,t)&&!n.o(e,t)&&Object.defineProperty(e,t,{enumerable:!0,get:o[t]})},n.o=(e,o)=>Object.prototype.hasOwnProperty.call(e,o),n.r=e=>{\"undefined\"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:\"Module\"}),Object.defineProperty(e,\"__esModule\",{value:!0})};var l={};return(()=>{\"use strict\";n.d(l,{component:()=>s});const e=coreApis.componentApis.define,o=coreApis.utils,t=coreApis.utils.urls;let r;const i=()=>(0,o.preventEvent)(unsafeWindow,\"mousewheel\",(()=>[\"player-mode-full\",\"player-fullscreen-fix\",\"player-full-win\"].some((e=>document.body.classList.contains(e))))),s=(0,e.defineComponentMetadata)({name:\"disableScrollVolume\",displayName:\"禁止滚轮调音量\",tags:[componentsTags.video],entry:()=>{r?.(),r=i()},reload:()=>{r?.(),r=i()},unload:()=>{r?.()},urlInclude:t.allVideoUrls,commitHash:\"90b4192e1e37ad443ced11ff9ea766712239a79f\",coreVersion:\"2.7.6\",description:(()=>{const e=n(132);return{...Object.fromEntries(e.keys().map((o=>[o.match(/index\\.(.+)\\.md$/)[1],e(o)]))),\"zh-CN\":()=>Promise.resolve().then(n.t.bind(n,466,17)).then((e=>e.default))}})()})})(),l=l.component})()));",
+      "metadata": {
+        "name": "disableScrollVolume",
+        "displayName": "禁止滚轮调音量",
+        "tags": [
+          {
+            "name": "video",
+            "displayName": "视频",
+            "color": "#2196F3",
+            "icon": "mdi-play-circle-outline",
+            "order": 1
+          }
+        ],
+        "commitHash": "90b4192e1e37ad443ced11ff9ea766712239a79f",
+        "coreVersion": "2.7.6",
+        "description": {}
+      },
+      "settings": {
+        "enabled": true,
+        "options": {}
+      }
+    },
+    "showUploadTime": {
+      "code": "!function(e,t){\"object\"==typeof exports&&\"object\"==typeof module?module.exports=t():\"function\"==typeof define&&define.amd?define([],t):\"object\"==typeof exports?exports[\"video/player/show-upload-time\"]=t():e[\"video/player/show-upload-time\"]=t()}(globalThis,(()=>(()=>{\"use strict\";var e={d:(t,n)=>{for(var o in n)e.o(n,o)&&!e.o(t,o)&&Object.defineProperty(t,o,{enumerable:!0,get:n[o]})},o:(e,t)=>Object.prototype.hasOwnProperty.call(e,t)},t={};e.d(t,{component:()=>m});const n=coreApis.componentApis.define,o=coreApis.observer,i=coreApis.utils,a=coreApis.utils.urls,r=coreApis.componentApis.feeds.api,s=coreApis.componentApis.video.videoInfo,l=coreApis.utils.log,c=coreApis.settings,d=\"显示视频投稿时间\",p=(0,l.useScopedConsole)(d),m=(0,n.defineComponentMetadata)({author:{name:\"wisokey\",link:\"https://github.com/wisokey\"},name:\"showUploadTime\",displayName:d,description:\"为视频播放页面的推荐列表中的视频添加显示视频投稿时间.\\r\\n\\r\\n`时间格式` 替换up名的文本格式 (默认为'up · yyyy-MM-dd'):\\r\\n  - y: 年\\r\\n  - M: 月\\r\\n  - d: 日\\r\\n  - h: 时\\r\\n  - m: 分\\r\\n  - s: 秒\\r\\n  - q: 季度\\r\\n  - up: up名\\r\\n\",tags:[componentsTags.video],urlInclude:a.videoUrls,options:{formatString:{displayName:\"文本格式\",defaultValue:\"up · yyyy-MM-dd\",validator:(e,t)=>e?.trim()?e:t}},entry:async e=>{let{metadata:t}=e;const n=(e,t,n)=>{const o={\"M+\":e.getMonth()+1,\"d+\":e.getDate(),\"h+\":e.getHours(),\"m+\":e.getMinutes(),\"s+\":e.getSeconds(),\"q+\":Math.floor((e.getMonth()+3)/3)};let i=t.match(/(y+)/);null!==i&&(t=t.replace(i[0],`${e.getFullYear()}`.substring(4-i[0].length)));for(const e in o)e&&(i=t.match(new RegExp(`(${e})`)),null!==i&&(t=t.replace(i[0],1===i[0].length?o[e]:`00${o[e]}`.substring(`${o[e]}`.length))));return i=t.match(/(up)/),null!==i&&(t=t.replace(i[0],n)),t},a=function(e){let o=arguments.length>1&&void 0!==arguments[1]&&arguments[1],i=arguments.length>2&&void 0!==arguments[2]?arguments[2]:\"\";if(!i){const{options:e}=(0,c.getComponentSettings)(t.name);i=e.formatString?.toString()}e.forEach((async e=>{if(o||!e.item.owner.mark){if(e.item.owner.mark=!0,o||!e.mark){let t;if(e.mark=!0,e.item.ctime)t=new Date(1e3*e.item.ctime);else{const n=new s.VideoInfo(e.item.aid);await n.fetchInfo(),t=n.createTime,e.item.ctime=t.getTime()/1e3}e.oldname||(e.oldname=e.name),e.name=n(t,i,e.oldname)}e.item.owner.name=e.name}}))},l=()=>{const e=dq(\"#reco_list\");let t=(0,r.getVueData)(e);return void 0===t.isOpen&&(t=t.$children[0],void 0===t.isOpen&&(p.log(\"结构获取失败\"),p.log(document.URL),p.log(t))),t};(0,c.addComponentListener)(`${t.name}.formatString`,(e=>{const t=l().$children.filter((e=>-1===e.$el.className.indexOf(\"special\")));a(t,!0,e)}),!1),(0,o.urlChange)((async()=>{await(0,i.playerReady)();const e=l().$children.filter((e=>-1===e.$el.className.indexOf(\"special\")));a(e)})),await(0,i.playerReady)(),(0,o.childList)(dq(\"#reco_list .rec-list\"),(async()=>{const e=l();if(e.isOpen){const t=e.$children.filter((e=>-1===e.$el.className.indexOf(\"special\")));a(t)}}))},commitHash:\"90b4192e1e37ad443ced11ff9ea766712239a79f\",coreVersion:\"2.7.6\"});return t=t.component})()));",
+      "metadata": {
+        "author": {
+          "name": "wisokey",
+          "link": "https://github.com/wisokey"
+        },
+        "name": "showUploadTime",
+        "displayName": "显示视频投稿时间",
+        "description": "为视频播放页面的推荐列表中的视频添加显示视频投稿时间.\r\n\r\n`时间格式` 替换up名的文本格式 (默认为'up · yyyy-MM-dd'):\r\n  - y: 年\r\n  - M: 月\r\n  - d: 日\r\n  - h: 时\r\n  - m: 分\r\n  - s: 秒\r\n  - q: 季度\r\n  - up: up名\r\n",
+        "tags": [
+          {
+            "name": "video",
+            "displayName": "视频",
+            "color": "#2196F3",
+            "icon": "mdi-play-circle-outline",
+            "order": 1
+          }
+        ],
+        "options": {
+          "formatString": {
+            "displayName": "文本格式",
+            "defaultValue": "up · yyyy-MM-dd"
+          }
+        },
+        "commitHash": "90b4192e1e37ad443ced11ff9ea766712239a79f",
+        "coreVersion": "2.7.6"
+      },
+      "settings": {
+        "enabled": true,
+        "options": {
+          "formatString": "up · yyyy-MM-dd"
+        }
+      }
     }
   },
   "components": {
@@ -3609,8 +3541,8 @@
         "downloadPackageEmitMode": "打包下载",
         "devMode": false,
         "recentComponents": {
-          "simplifyHome": 1695548320668,
-          "customNavbar": 1695548249815,
+          "simplifyHome": 1695553318002,
+          "customNavbar": 1695553273464,
           "legacyAutoPlay": 1695548129141,
           "skipChargeList": 1695548129216,
           "downloadLiveRecords": 1695548129288,
@@ -3619,54 +3551,54 @@
           "seoRedirect": 1695548372810,
           "quickFavorite": 1695548129614,
           "videoScreenshot": 1695548129690,
-          "seekByFrames": 1695548747480,
-          "showCoverBeforePlay": 1695548747187,
-          "rememberVideoSpeed": 1695548724973,
-          "doubleClickFullscreen": 1695548746742,
-          "playerFocus": 1695548739854,
-          "defaultPlayerMode": 1695548741205,
-          "playerControlBackground": 1695548744871,
+          "seekByFrames": 1695548129769,
+          "showCoverBeforePlay": 1695553255486,
+          "rememberVideoSpeed": 1695548814938,
+          "doubleClickFullscreen": 1695548129978,
+          "playerFocus": 1695553250174,
+          "defaultPlayerMode": 1695553202896,
+          "playerControlBackground": 1695548400904,
           "outerWatchlater": 1695548401386,
           "fullEpisodeTitle": 1695548399632,
           "copyCommentsLink": 1695548130475,
           "videoDefaultLocation": 1695548398343,
-          "expandDanmakuList": 1695548736725,
+          "expandDanmakuList": 1695548398061,
           "watchlaterRedirect": 1695548393541,
           "avUrl": 1695548394029,
           "touchComboLike": 1695548288733,
-          "playerAutoLight": 1695548754194,
+          "playerAutoLight": 1695553246317,
           "imageResolution": 1695548131114,
           "danmakuAirborne": 1695548397771,
           "biliplusRedirect": 1695548396980,
           "imageExporter": 1695548307059,
-          "preserveDanmakuInput": 1695548732539,
-          "hideBangumiSponsors": 1695548131656,
+          "preserveDanmakuInput": 1695548131559,
+          "hideBangumiSponsors": 1695553285621,
           "v1Migrate": 1695548131746,
           "doubleClickControl": 1695548131819,
-          "fullFeedsContent": 1695548131901,
+          "fullFeedsContent": 1695553277203,
           "liveGiftBox": 1695548131965,
           "badgeHelper": 1695548132128,
           "liveDanmakuSendbar": 1695548132218,
           "changeUpdateUrls": 1695548132295,
           "devClient": 1695548132366,
-          "playerOnTop": 1695548735491,
-          "fullVideoDescription": 1695548389384,
-          "extendVideoSpeed": 1695548731869,
+          "playerOnTop": 1695548881014,
+          "fullVideoDescription": 1695553276619,
+          "extendVideoSpeed": 1695548132629,
           "unfoldFeeds": 1695548306190,
           "foldComments": 1695548305774,
-          "hideBanner": 1695548132906,
+          "hideBanner": 1695553281142,
           "dpiLiveShowgirl": 1695548132971,
           "touchPlayerControl": 1695548133073,
           "bvidConvert": 1695548388237,
           "keymap": 1695548388640,
           "viewCover": 1695548386547,
-          "playerShadow": 1695548736258,
-          "hideBangumiReviews": 1695548133411,
+          "playerShadow": 1695553197469,
+          "hideBangumiReviews": 1695553286686,
           "alwaysShowDuration": 1695548389965,
-          "darkModeSchedule": 1695548245576,
+          "darkModeSchedule": 1695553309826,
           "liveHomeMute": 1695548133614,
           "columnUnlock": 1695548133689,
-          "freshHome": 1695548329447,
+          "freshHome": 1695553303847,
           "urlParamsClean": 1695548134048,
           "fixedFeedsSidebars": 1695548134115,
           "downloadVideo": 1695548384921,
@@ -3678,19 +3610,19 @@
           "downloadAudio": 1695548134720,
           "autoHideSidebar": 1695548243574,
           "checkInCenter": 1695548134972,
-          "fullFeedsTitle": 1695548135042,
+          "fullFeedsTitle": 1695553277804,
           "darkModeFollowSystem": 1695548244603,
           "sidebarOffset": 1695548135181,
           "hideRecommendedLive": 1695548379729,
           "copyFeedsLink": 1695548135315,
           "extendFeedsLive": 1695548307521,
           "darkMode": 1695548245239,
-          "playerIntersectionActions": 1695548729998,
+          "playerIntersectionActions": 1695548135821,
           "disableFeedsDetails": 1695548306572,
           "downloadDanmaku": 1695548383538,
           "simplifyComments": 1695548136034,
           "hideVideoTopMask": 1695548380344,
-          "removePlayerPopup": 1695548746276,
+          "removePlayerPopup": 1695548376868,
           "hideRelatedVideos": 1695548380670,
           "collapseLiveSideBar": 1695548136454,
           "elegantScrollbar": 1695548262745,
@@ -3701,9 +3633,12 @@
           "hideFeedsCommentPreview": 1695548195923,
           "imageAutoBackToTop": 1695548196175,
           "hideTrendingSearch": 1695548200018,
-          "hideVideoShare": 1695548728117,
+          "hideVideoShare": 1695548200507,
           "compatibilities": 1695548264615,
-          "settingsPanel": 1695548270280
+          "settingsPanel": 1695548835841,
+          "playerOnTopNew": 1695553305684,
+          "disableScrollVolume": 1695553193815,
+          "showUploadTime": 1695553194678
         }
       }
     },
@@ -4035,7 +3970,7 @@
             },
             "playerOnTop": {
               "url": "https://cdn.jsdelivr.net/gh/the1812/Bilibili-Evolved@master/registry/dist/components/style/player-on-top.js",
-              "lastUpdateCheck": 1695548132429,
+              "lastUpdateCheck": 1695548873470,
               "installTime": 1661003652659,
               "alwaysUpdate": false
             },
@@ -4284,6 +4219,24 @@
               "lastUpdateCheck": 1695548200502,
               "installTime": 1695548200502,
               "alwaysUpdate": false
+            },
+            "playerOnTopNew": {
+              "url": "https://cdn.jsdelivr.net/gh/the1812/Bilibili-Evolved@master/registry/dist/components/style/player-on-top-new.js",
+              "lastUpdateCheck": 1695548877108,
+              "installTime": 1695548877108,
+              "alwaysUpdate": false
+            },
+            "disableScrollVolume": {
+              "url": "https://cdn.jsdelivr.net/gh/the1812/Bilibili-Evolved@master/registry/dist/components/video/player/disable-scroll-volume.js",
+              "lastUpdateCheck": 1695548936657,
+              "installTime": 1695548936657,
+              "alwaysUpdate": false
+            },
+            "showUploadTime": {
+              "url": "https://cdn.jsdelivr.net/gh/the1812/Bilibili-Evolved@master/registry/dist/components/video/player/show-upload-time.js",
+              "lastUpdateCheck": 1695548946673,
+              "installTime": 1695548946673,
+              "alwaysUpdate": false
             }
           },
           "plugins": {
@@ -4357,6 +4310,12 @@
               "url": "https://cdn.jsdelivr.net/gh/the1812/Bilibili-Evolved@master/registry/dist/plugins/video/player/speed.js",
               "lastUpdateCheck": 1695548137338,
               "installTime": 1661003679914,
+              "alwaysUpdate": false
+            },
+            "downloadVideo.outputs.motrix": {
+              "url": "https://cdn.jsdelivr.net/gh/the1812/Bilibili-Evolved@master/registry/dist/plugins/video/download/motrix-output.js",
+              "lastUpdateCheck": 1695548972750,
+              "installTime": 1695548972750,
               "alwaysUpdate": false
             }
           },
